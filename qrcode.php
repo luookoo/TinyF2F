@@ -1,14 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TinyF2F</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdui/0.4.0/css/mdui.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdui/0.4.0/js/mdui.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.js"></script>
+</head>
+<body>
+    <div class="mdui-container">
+        <h1>TinyF2F</h1>
+        <form action="qrcode.php" class="mdui-textfield mdui-textfield-floating-label" method="post">
+            <label class="mdui-textfield-label">请输入金额然后使用支付宝扫描二维码</label>
+            <input class="mdui-textfield-input" name="sum" type="number"/>
+            <button class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent mdui-btn-block"">确认并提交订单</button>
+        </form>
+        <div id="qrCode" class="mdui-center" style="width: 300px">
 <?php
 header('Content-type:text/html; Charset=utf-8');
 /*** 请填写以下配置信息 ***/
 $appid = 'xxxxx';  //https://open.alipay.com 账户中心->密钥管理->开放平台密钥，填写添加了电脑网站支付的应用的APPID
 $notifyUrl = 'http://www.xxx.com/alipay/notify.php';     //付款成功后的异步回调地址
 $outTradeNo = uniqid();     //你自己的商品订单号，不能重复
-$payAmount = 0.01;          //付款金额，单位:元
 $orderName = '支付测试';    //订单标题
 $signType = 'RSA2';			//签名算法类型，支持RSA2和RSA，推荐使用RSA2
 $rsaPrivateKey='xxxx';		//商户私钥，填写对应签名算法类型的私钥，如何生成密钥参考：https://docs.open.alipay.com/291/105971和https://docs.open.alipay.com/200/105310
 /*** 配置结束 ***/
+$payAmount = $_POST['sum'];
 $aliPay = new AlipayService();
 $aliPay->setAppid($appid);
 $aliPay->setNotifyUrl($notifyUrl);
@@ -22,8 +40,8 @@ $result = $result['alipay_trade_precreate_response'];
 if($result['code'] && $result['code']=='10000'){
     //生成二维码
     $url = 'http://pan.baidu.com/share/qrcode?w=300&h=300&url='.$result['qr_code'];
-    echo "<img src='{$url}' style='width:300px;'><br>";
-    echo '二维码内容：'.$result['qr_code'];
+    echo "<img src='{$url}' style='width:300px;'>";
+    echo '<center><p class="mdui-typo">请使用支付宝扫描二维码付款</p></center>';
 }else{
     echo $result['msg'].' : '.$result['sub_msg'];
 }
@@ -189,3 +207,11 @@ class AlipayService
         return $data;
     }
 }
+?>
+        </div>
+    </div>
+    <div class="footer mdui-typo" style="text-align: center;">
+        <p>Powered by <a href="https://www.sstype.com">野狼博客</a> &#38; <a href="https://www.lowendapple.com">LowEndApple</a></p>
+    </div>
+</body>
+</html>
