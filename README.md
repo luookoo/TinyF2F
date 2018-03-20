@@ -6,6 +6,8 @@
 
 TinyF2F是一个适用于多种场景的支付宝当面付简单收款工具。
 
+[Demo](https://www.lowendapple.com/qrcode.php)|[野狼博客](https://www.sstype.com/)|[LowEndApple](https://www.lowendapple.com/)
+
 ## 说明
 
 修改`qrcode.php`中的第22至27行为你的接口信息就可以上传到你的网站进行收款了。
